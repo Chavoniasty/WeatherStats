@@ -25,6 +25,7 @@ async function getGeo(city) {
             const lat = data[0].lat;
             const lon = data[0].lon;
             const geo = [lat, lon];
+
             return geo;
         }
     } catch (error) {
@@ -42,7 +43,7 @@ async function getCurrentWeather(geo) {
             const wind = data.wind;
             const clouds = data.clouds.all;
 
-            const weather = [desc, main, wind, clouds]
+            const weather = [desc, main, wind, clouds];
             return weather;
         }
     } catch (error) {
@@ -50,6 +51,20 @@ async function getCurrentWeather(geo) {
     }
 }
 
+async function getPollution(geo) {
+    try {
+        const response = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${geo[0]}&lon=${geo[1]}&appid=${API_KEY}`);
+        if (response.ok) {
+            const data = await response.json();
+            const list = data.list;
+            const components = list[0].components;
+
+            return components;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 app.get('/currentWeather', async function (req, res) {
     const city = req.query.city;
@@ -64,7 +79,22 @@ app.get('/currentWeather', async function (req, res) {
     } catch (error) {
         console.log(error)
     }
+});
 
+app.get('/getPollution', async function (req, res) {
+    const city = req.query.city;
+    try {
+        const geo = await getGeo(city);
+        try {
+            const pollution = await getPollution(geo);
+            const pollutionData = [city, pollution]
+            res.json(pollutionData)
+        } catch (error) {
+            console.log(error)
+        }
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.listen(port, () => {
