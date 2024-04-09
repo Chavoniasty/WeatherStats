@@ -17,10 +17,7 @@ app.use(cors(options));
 app.use(express.json());
 
 
-app.get('/currentWeather', async function (req, res) {
-    console.log("get hello")
-    const city = req.query.city;
-    console.log(city)
+async function getGeo(city) {
     try {
         const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}`);
         if (response.ok) {
@@ -28,29 +25,46 @@ app.get('/currentWeather', async function (req, res) {
             const lat = data[0].lat;
             const lon = data[0].lon;
             const geo = [lat, lon];
-            console.log(geo);
-            try {
-                const response2 = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`)
-                if (response2.ok) {
-                    const data2 = await response2.json();
-                    console.log(data2);
-                    const desc = data2.weather[0].description;
-                    const main = data2.main;
-                    const wind = data2.wind;
-                    const clouds = data2.clouds.all;
-                    // const sunrise = new Date(data2.sys.sunrise * 1000).toTimeString("en-US");
-                    // const sunset = new Date(data2.sys.sunset * 1000).toTimeString("en-US");
-                    // console.log(sunrise, sunset);
-                    const packedData = [desc, main, wind, clouds];
-                    res.json(packedData);
-                }
-            } catch (error) {
-                console.log(error)
-            }
+            return geo;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getCurrentWeather(geo) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo[0]}&lon=${geo[1]}&units=metric&appid=${API_KEY}`)
+        if (response.ok) {
+            const data = await response.json();
+            const desc = data.weather[0].description;
+            const main = data.main;
+            const wind = data.wind;
+            const clouds = data.clouds.all;
+
+            const weather = [desc, main, wind, clouds]
+            return weather;
         }
     } catch (error) {
         console.log(error)
     }
+}
+
+
+app.get('/currentWeather', async function (req, res) {
+    const city = req.query.city;
+    try {
+        const geo = await getGeo(city);
+        try {
+            const weather = await getCurrentWeather(geo);
+            res.json(weather);
+        } catch (error) {
+            console.log(error)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
 });
 
 app.listen(port, () => {
