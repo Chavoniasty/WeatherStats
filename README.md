@@ -38,8 +38,8 @@ npm run dev
 ### Endpoints
 - GET /currentWeather  \
 params: city \
-response: [description, temperature info, wind info, icon ID]
-```json
+response: [description, temperature info, wind info, cloudiness, icon ID]
+```
 [
   'overcast clouds',
   {
@@ -60,7 +60,7 @@ response: [description, temperature info, wind info, icon ID]
 - GET /getPollution \
 params: city \
 response: object with every pollution, air quality index and city
-```json
+```
 {
   co: 343.8,    
   no: 0,        
