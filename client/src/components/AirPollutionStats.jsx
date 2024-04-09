@@ -17,7 +17,6 @@ function AirPollutionStats() {
             });
             if (response.ok) {
                 const data = await response.json()
-                console.log(data)
                 setPollutionStats(prevStats => [...prevStats, data])
             }
         } catch (error) {

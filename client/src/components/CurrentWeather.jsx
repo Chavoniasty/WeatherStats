@@ -26,7 +26,6 @@ function CurrentWeather() {
             });
             if (response.ok) {
                 const data = await response.json()
-                console.log(data)
                 setWeather(data)
                 setTitleCity(city)
                 setIconURL(`https://openweathermap.org/img/wn/${weather[4]}@2x.png`)
@@ -110,7 +109,9 @@ function CurrentWeather() {
                             </ul>
                         </div>
                     ) : (
-                        <h1> Enter your city in search panel under</h1>
+                        <div className="items-center justify-center w-full h-full">
+                            Enter city in search below...
+                        </div>
                     )}
                 </div>
                 <div className="w-full border-t-4 border-t-orange-400 ">
