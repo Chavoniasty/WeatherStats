@@ -18,7 +18,7 @@ function CurrentWeather() {
     const [iconURL, setIconURL] = useState("")
     async function fetchWeather() {
         try {
-            const response = await fetch(`BACKEND_URL + PORT + 3000/currentWeather?city=${city}`, {
+            const response = await fetch(`http://localhost:3000/currentWeather?city=${city}`, {
                 method: 'GET',
                 headers: {
                     'Access-Control-Allow-Origin': '*',
