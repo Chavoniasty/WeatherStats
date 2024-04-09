@@ -1,49 +1,49 @@
 import React, { useState } from 'react';
+import { TiDeleteOutline } from "react-icons/ti";
 
 function PollutionTable({ stats, setStats }) {
-    const [sortKey, setSortKey] = useState(null);
-    const [sortDirection, setSortDirection] = useState('asc');
+    const [sortKey, setSortKey] = useState(null)
+    const [sortDirection, setSortDirection] = useState('asc')
 
     function sort(key) {
         if (sortKey === key) {
-            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
         } else {
-            setSortKey(key);
-            setSortDirection('asc');
+            setSortKey(key)
+            setSortDirection('asc')
         }
-    };
+    }
 
     const sortedStats = [...stats].sort((a, b) => {
-        const aValue = sortKey ? a[sortKey] : null;
-        const bValue = sortKey ? b[sortKey] : null;
+        const aValue = sortKey ? a[sortKey] : null
+        const bValue = sortKey ? b[sortKey] : null
 
         if (sortDirection === 'asc') {
-            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
         } else {
-            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
         }
-    });
+    })
 
     function showSortMarker(key) {
         if (sortKey === key) {
-            return sortDirection === 'asc' ? '▲' : '▼';
+            return sortDirection === 'asc' ? '▲' : '▼'
         }
-        return null;
-    };
+        return null
+    }
 
     function deleteStat(index) {
-        const updatedStats = [...stats];
-        updatedStats.splice(index, 1);
-        setStats(updatedStats);
-    };
+        const updatedStats = [...stats]
+        updatedStats.splice(index, 1)
+        setStats(updatedStats)
+    }
 
     return (
         <div className='mt-4'>
-            <table className="w-full text-center table-fixed">
+            <table className="w-full text-center md:table-fixed">
                 <thead className='text-orange-400 border-b-2 border-orange-400'>
                     <tr>
-                        <th className=' w-min'>
-
+                        <th className='w-4'>
                         </th>
                         <th onClick={() => sort('city')}>
                             City {showSortMarker('city')}
@@ -77,8 +77,8 @@ function PollutionTable({ stats, setStats }) {
                 <tbody>
                     {sortedStats.map((stat, index) => (
                         <tr key={index} className='border-b-2 border-orange-100/35'>
-                            <td className=' w-min'>
-                                <button onClick={() => deleteStat(index)} className='text-red-300'>X</button>
+                            <td className='w-4' onClick={() => deleteStat(index)}>
+                                <TiDeleteOutline onClick={() => deleteStat(index)} />
                             </td>
                             <td className='flex justify-center'>
                                 {stat.city}
