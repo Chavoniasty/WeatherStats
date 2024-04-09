@@ -5,10 +5,10 @@ import AirPollutionStats from "./components/AirPollutionStats"
 function App() {
 
   return (
-    <div className="w-screen h-screen">
-      <div className="flex flex-col h-full w-full">
+    <div className="w-screen h-screen ">
+      <div className="flex flex-col w-full h-full">
         <Navbar />
-        <div className="flex flex-col lg:flex-row items-center justify-around h-full">
+        <div className="flex flex-col items-center justify-around h-full lg:flex-row">
           <CurrentWeather />
           <AirPollutionStats />
         </div>

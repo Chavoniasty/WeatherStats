@@ -39,11 +39,12 @@ async function getCurrentWeather(geo) {
         if (response.ok) {
             const data = await response.json();
             const desc = data.weather[0].description;
+            const icon = data.weather[0].icon;
             const main = data.main;
             const wind = data.wind;
             const clouds = data.clouds.all;
 
-            const weather = [desc, main, wind, clouds];
+            const weather = [desc, main, wind, clouds, icon];
             return weather;
         }
     } catch (error) {
@@ -57,7 +58,9 @@ async function getPollution(geo) {
         if (response.ok) {
             const data = await response.json();
             const list = data.list;
-            const components = list[0].components;
+            const aqi = list[0].main.aqi;
+            let components = list[0].components;
+            components.aqi = aqi;
 
             return components;
         }
@@ -86,9 +89,9 @@ app.get('/getPollution', async function (req, res) {
     try {
         const geo = await getGeo(city);
         try {
-            const pollution = await getPollution(geo);
-            const pollutionData = [city, pollution]
-            res.json(pollutionData)
+            let pollution = await getPollution(geo);
+            pollution.city = city;
+            res.json(pollution)
         } catch (error) {
             console.log(error)
         }
