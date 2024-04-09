@@ -9,27 +9,21 @@ function CurrentWeather() {
     const [isInfo, setIsInfo] = useState(false)
 
     // RESPONSE
-    const [description, setDescription] = useState("")
-    const [temp, setTemp] = useState()
-    const [pressure, setPressure] = useState()
-    const [humidity, setHumidity] = useState()
+    const [weather, setWeather] = useState()
+
 
     async function essa() {
-        console.log(city)
-        console.log(country)
-
         try {
-            // it works in postman 
-            const response = await fetch(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/geo/1.0/direct?q=${city.toUpperCase()}&appid=24bd9423969a8e6152357abf9fff588d`, {
+            const response = await fetch(`http://localhost:3000/currentWeather?city=${city}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
             });
             if (response.ok) {
+                const data = await response.json()
+                setWeather(data)
                 setIsInfo(true)
-                const data = await response.json();
-                console.log(data);
             }
         } catch (error) {
             console.log("chuj")
@@ -43,7 +37,37 @@ function CurrentWeather() {
                 <legend className="text-xl text-blue-400 font-bold px-2"> Check weather for your city</legend>
                 <div className="h-4/5">
                     {(isInfo) ? (
-                        <h1> hola hola </h1>
+                        <div>
+                            <ul className="flex flex-col">
+                                <li>
+                                    Description: {weather[0]}
+                                </li>
+                                <li>
+                                    Temperature: {weather[1].temp}
+                                </li>
+                                <li>
+                                    Temperature (feels like): {weather[1].feels_like}
+                                </li>
+                                <li>
+                                    Max temp = {weather[1].temp_max}
+                                </li>
+                                <li>
+                                    Min temp = {weather[1].temp_min}
+                                </li>
+                                <li>
+                                    Pressure = {weather[1].pressure} hPa
+                                </li>
+                                <li>
+                                    Humidity = {weather[1].humidity}
+                                </li>
+                                <li>
+                                    Wind speed = {weather[2].speed} m/s
+                                </li>
+                                <li>
+                                    Clouds = {weather[3]}%
+                                </li>
+                            </ul>
+                        </div>
                     ) : (
                         <h1> Enter your city in search panel under</h1>
                     )}
