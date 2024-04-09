@@ -1,9 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-require('dotenv').config();
+require('dotenv').config()
 
 const API_KEY = process.env.API_KEY;
-console.log(API_KEY)
 
 const app = express();
 const port = 3000;
